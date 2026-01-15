@@ -1,4 +1,5 @@
-const API = "https://luxury-shop-backend.onrender.com/products";
+const API = "https://luxury-shop-backend.onrender.com";
+const PRODUCT_API = `${API}/products`;
 
 
 let products = [];
@@ -6,6 +7,7 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 const quantities = {};
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadProducts();
   if (document.getElementById("products")) loadProducts();
   if (document.getElementById("cart-count")) updateCartCount();
   if (document.getElementById("admin-product-list")) loadAdminProducts();
@@ -19,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* ================= SHOP ================= */
 async function loadProducts() {
-  const res = await fetch(API);
+  const res = await fetch(PRODUCT_API);
   const data = await res.json();
 
   products = data;
@@ -379,3 +381,42 @@ document.addEventListener("mousemove", e => {
 document.addEventListener("mouseup", () => {
   isDragging = false;
 });
+/* ================= CHECKOUT ================= */
+
+const checkoutForm = document.getElementById("checkoutForm");
+
+if (checkoutForm) {
+  checkoutForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const orderData = {
+      name: document.getElementById("name").value,
+      phone: document.getElementById("phone").value,
+      email: document.getElementById("email").value,
+      address: document.getElementById("address").value,
+      cart: JSON.parse(localStorage.getItem("cart")) || []
+    };
+
+    try {
+      const res = await fetch(`${API}/checkout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.removeItem("cart");
+        window.location.href = "success.html";
+      } else {
+        alert(data.error || "Checkout failed");
+      }
+    } catch (err) {
+      alert("Server error");
+      console.error(err);
+    }
+  });
+}
