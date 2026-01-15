@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">LUXURY</div>
+
+  <nav class="menu">
+    <a href="index.html">Shop</a>
+    <a href="cart.html" class="active">
+      Cart <span id="cart-count">(0)</span>
+    </a>
+    <a href="admin-edit.html">Admin</a>
+  </nav>
+</header>
+
+<section class="cart-page">
+
+  <!-- LEFT: ITEMS -->
+  <div class="cart-list" id="cart-items"></div>
+
+  <!-- RIGHT: SUMMARY -->
+  <div class="cart-summary">
+    <h3>Order Summary</h3>
+    <p class="summary-total" id="total-price">Total: 0 THB</p>
+    
+  </div>
+<button class="checkout-btn" onclick="location.href='checkout.html'">
+  Checkout
+</button>
+
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

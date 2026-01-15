@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Luxury Shop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">LUXURY</div>
+
+  <nav class="menu">
+    <a href="index.html" class="active">Shop</a>
+    <a href="cart.html">
+      Cart <span id="cart-count">(0)</span>
+    </a>
+    <a href="admin-edit.html">Admin</a>
+  </nav>
+</header>
+
+<div class="search-container">
+  <input id="search-input" onkeyup="searchProducts()" placeholder="Search...">
+</div>
+
+<div class="category-menu">
+  <button onclick="filterByCategory('All')">All</button>
+  <button onclick="filterByCategory('Shirts')">Shirts</button>
+  <button onclick="filterByCategory('Pants')">Pants</button>
+  <button onclick="filterByCategory('Bags')">Bags</button>
+  <button onclick="filterByCategory('Shoes')">Shoes</button>
+  <button onclick="filterByCategory('Hats')">Hats</button>
+  <button onclick="filterByCategory('Accessories')">Accessories</button>
+</div>
+
+<section id="products" class="products"></section>
+
+<!-- ================= IMAGE MODAL (เพิ่มตรงนี้) ================= -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+  <span class="close-modal">&times;</span>
+  <img id="modalImg">
+</div>
+<!-- ============================================================= -->
+
+<script src="app.js"></script>
+</body>
+</html>

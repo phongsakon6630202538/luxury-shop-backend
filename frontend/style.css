@@ -1,0 +1,1087 @@
+body { background:#111; color:#fff; font-family:serif; margin:0 }
+.navbar { display:flex; justify-content:space-between; padding:20px 60px; border-bottom:1px solid #333 }
+.products { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:30px; padding:40px }
+.product-card { background:#1a1a1a; padding:20px; border-radius:14px; text-align:center }
+.image-wrapper { height:260px; display:flex; justify-content:center; align-items:center }
+.image-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+/* ===== QUANTITY CONTROL ===== */
+/* ===== CONTROL BAR WRAPPER ===== */
+.cart-controls {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+/* ===== ADD TO CART WRAP ===== */
+.add-cart-wrap {
+  margin-top: auto;  
+}
+
+/* ===== ADD CART MAIN ===== */
+.add-cart-main {
+  position: relative;
+  width: 100%;
+  height: 46px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #e8e8e8);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== ADD TEXT (DEFAULT) ===== */
+.add-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* ===== QTY INSIDE (HIDDEN) ===== */
+.qty-inside {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* ===== HOVER STATE ===== */
+.add-cart-main:hover .add-text {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.add-cart-main:hover .qty-inside {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* ===== QTY BUTTON ===== */
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #000;
+  background: transparent;
+  color: #000;
+  cursor: pointer;
+}
+
+.qty-inside span {
+  min-width: 18px;
+  text-align: center;
+  font-size: 14px;
+  color: #000;
+}
+
+
+/* ===== QUANTITY CAPSULE ===== */
+.cart-controls {
+  gap: 0;
+}
+
+.qty-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.qty-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.cart-controls span {
+  min-width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+/* ===== ADD TO CART ===== */
+.add-cart {
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #e6e6e6);
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .3px;
+  border: none;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.add-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(255,255,255,.15);
+}
+
+/* ===== SUBTLE DIVIDER ===== */
+.product-card::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: rgba(255,255,255,.12);
+  margin: 10px auto 0;
+}
+
+
+/* ===== OPTIONAL: subtle divider ===== */
+.product-card::after {
+  content: "";
+  display: block;
+  margin: 12px auto 0;
+  width: 40px;
+  height: 1px;
+  background: rgba(255,255,255,.08);
+}
+
+
+/* ===== SEARCH BAR CENTER ===== */
+.search-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 10px;
+  border-bottom: 1px solid #222;
+}
+
+.search-container input {
+  width: 320px;
+  padding: 12px 18px;
+  border-radius: 30px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  text-align: center;
+}
+
+/* ===== CATEGORY MENU CENTER ===== */
+.category-menu {
+  display: flex;
+  justify-content: center;   /* ⭐ ตัวสำคัญ */
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0 24px;
+  flex-wrap: wrap;           /* กันล้นจอ */
+}
+
+.category-menu button {
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid #333;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.category-menu button:hover,
+.category-menu button.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* ===== NAVBAR RIGHT MENU ===== */
+.navbar .menu {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.navbar .menu a {
+  position: relative;
+  text-decoration: none;
+  font-size: 14px;
+  color: #aaa;
+  letter-spacing: 0.4px;
+  transition: color .25s ease;
+}
+
+.navbar .menu a:hover {
+  color: #fff;
+}
+
+/* Active page */
+.navbar .menu a.active {
+  color: #fff;
+}
+
+/* CART COUNT STYLE */
+#cart-count {
+  margin-left: 4px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Optional underline effect */
+.navbar .menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width .25s ease;
+}
+
+.navbar .menu a:hover::after,
+.navbar .menu a.active::after {
+  width: 100%;
+}
+/* ===== PRODUCT GRID ===== */
+.products {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* แถวละ 5 */
+  gap: 28px;
+  padding: 40px 60px;
+}
+
+/* ===== PRODUCT CARD LAYOUT FIX ===== */
+.product-card {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 18px;
+  padding: 22px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+/* ===== IMAGE ===== */
+.image-wrapper {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+/* ===== TITLE ===== */
+.product-card h3 {
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     /* ⭐ ล็อก 2 บรรทัด */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(1.4em * 2); /* ⭐ ความสูงเท่ากัน */
+}
+
+/* ===== PRICE ===== */
+.product-card .price,
+.product-card p:nth-of-type(1) {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+/* ===== STOCK ===== */
+.product-card .stock,
+.product-card p:nth-of-type(2) {
+  font-size: 13px;
+  margin-bottom: 18px;
+  color: #ccc;
+}
+
+/* ===== PUSH BOTTOM ===== */
+.product-card .add-cart {
+  margin-top: auto;           /* ⭐ ตัวสำคัญ */
+}
+
+/* ===== BUTTON ===== */
+.add-cart {
+  padding: 12px 0;
+  border-radius: 30px;
+  font-size: 14px;
+}
+
+/* ===== ADD TO CART BUTTON ===== */
+.add-cart {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 30px;
+  background: #fff;
+  color: #000;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.add-cart:hover {
+  background: #ddd;
+}
+@media (max-width: 1400px) {
+  .products { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 1100px) {
+  .products { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .products { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .products { grid-template-columns: 1fr; }
+}
+/* ===== CART PAGE ===== */
+.cart-page {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 60px;
+}
+
+/* ===== CART LIST ===== */
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== CART ITEM ===== */
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.cart-item img {
+  width: 100px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.cart-info h4 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.cart-info p {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.cart-info strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+}
+
+/* REMOVE BUTTON */
+.cart-info button {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.cart-info button:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* ===== SUMMARY ===== */
+.cart-summary {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 16px;
+  padding: 30px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.cart-summary h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.summary-total {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+/* CHECKOUT */
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 30px;
+  border: none;
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+  cursor: pointer;
+}
+/* ===== REMOVE BUTTON ===== */
+.cart-info button {
+  margin-top: 10px;
+  padding: 6px 16px;
+  font-size: 13px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.cart-info button:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+/* ===== CHECKOUT BUTTON ===== */
+.checkout-btn {
+  width: 100%;
+  padding: 16px 0;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(180deg, #ffffff, #e6e6e6);
+  color: #000;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255,255,255,0.2);
+}
+
+.checkout-btn:hover {
+  box-shadow: 0 0 0 1px #fff, 0 12px 28px rgba(255,255,255,.25);
+}
+/* ===== ADMIN TABLE ===== */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 14px;
+  padding: 40px 60px;
+}
+
+/* HEADER */
+.admin-table thead th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  padding-bottom: 10px;
+}
+
+/* ROW */
+.admin-table tbody tr {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 14px;
+}
+
+/* CELL */
+.admin-table td {
+  padding: 16px 18px;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+/* IMAGE */
+.admin-table td img {
+  width: 54px;
+  height: 68px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+/* PRODUCT NAME */
+.admin-table td:nth-child(2) {
+  font-weight: 500;
+  color: #fff;
+}
+
+/* CATEGORY */
+.admin-table td:nth-child(3) {
+  color: #ccc;
+  font-size: 13px;
+}
+
+/* PRICE / STOCK */
+.admin-table td:nth-child(4),
+.admin-table td:nth-child(5) {
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ACTIONS */
+.admin-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+/* ===== ADMIN BUTTONS ===== */
+.btn-edit,
+.btn-delete {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  transition: all .25s ease;
+}
+
+/* EDIT */
+.btn-edit {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+}
+
+.btn-edit:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* DELETE */
+.btn-delete {
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid rgba(255,107,107,.4);
+  margin-left: 6px;
+}
+
+.btn-delete:hover {
+  background: #ff6b6b;
+  color: #000;
+}
+/* ===== ADMIN EDIT MODAL ===== */
+.admin-modal {
+  position: fixed;           /* ⭐ สำคัญ */
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+/* SHOW MODAL */
+.admin-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* MODAL BOX */
+.admin-modal-content {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 16px;
+  padding: 28px;
+  width: 420px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* INPUT */
+.admin-modal-content input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: #fff;
+}
+
+/* BUTTONS */
+.admin-modal-content button {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-modal-content button:first-of-type {
+  background: #fff;
+  color: #000;
+}
+
+.admin-modal-content button:last-of-type {
+  background: transparent;
+  color: #aaa;
+}
+/* ===== ADD PRODUCT PAGE ===== */
+.add-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+}
+
+/* CARD */
+.add-card {
+  width: 420px;
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 18px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.add-card h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+/* INPUT */
+.add-card input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* ADD BUTTON */
+.add-btn {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(180deg, #fff, #e6e6e6);
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255,255,255,.2);
+}
+/* ===== SELECT (CATEGORY) ===== */
+.add-card select {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background-color: #0f0f0f;
+  color: #777;
+  font-size: 14px;
+  outline: none;
+  appearance: none;           /* ซ่อนลูกศรเดิม */
+  cursor: pointer;
+}
+
+/* PLACEHOLDER OPTION */
+.add-card select option[value=""] {
+  color: #777;
+}
+
+/* OPTIONS */
+.add-card select option {
+  background: #111;
+  color: #fff;
+}
+
+/* FOCUS */
+.add-card select:focus {
+  border-color: #fff;
+}
+
+/* CUSTOM ARROW */
+.add-card {
+  position: relative;
+}
+
+.add-card select {
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+  padding-right: 40px;
+}
+.admin-modal-content select {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background-color: #0f0f0f;
+  color: #fff;
+  font-size: 14px;
+  appearance: none;
+}
+.cart-empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: #aaa;
+}
+
+.cart-empty p {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.back-shop {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid #444;
+  color: #fff;
+  text-decoration: none;
+}
+/* ===== CHECKOUT PAGE ===== */
+.checkout-page {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 60px;
+}
+
+/* FORM */
+.checkout-form {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.checkout-form h3 {
+  margin-bottom: 10px;
+}
+
+/* INPUT */
+.checkout-form input {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.25));
+  color: #fff;
+}
+
+/* SUMMARY */
+.checkout-summary {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 20px;
+  padding: 32px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* TOTAL */
+.checkout-total {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+/* BUTTON */
+.checkout-btn {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(180deg, #fff, #e6e6e6);
+  color: #000;
+  cursor: pointer;
+  font-size: 15px;
+  transition: .3s;
+}
+
+.checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(255,255,255,.25);
+}
+/* ===== CART PAGE LAYOUT FIX ===== */
+.cart-page {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 40px;
+  padding: 60px;
+  align-items: start;
+}
+
+/* ===== CART LIST (LEFT) ===== */
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* จำกัดความกว้าง card ไม่ให้ยาวเกิน */
+.cart-item {
+  max-width: 100%;
+}
+
+/* ===== SUMMARY (RIGHT) ===== */
+.cart-summary {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 20px;
+  padding: 32px;
+  position: sticky;
+  top: 100px;
+}
+
+/* ===== SUMMARY TITLE ===== */
+.cart-summary h3 {
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+/* ===== TOTAL ===== */
+.summary-total {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 26px;
+}
+
+/* ===== CHECKOUT BUTTON (ONLY HERE) ===== */
+.cart-summary .checkout-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(180deg, #fff, #e6e6e6);
+  color: #000;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.cart-summary .checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(255,255,255,.25);
+}
+/* ===== SUCCESS PAGE ===== */
+.success-page {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-card {
+  background: linear-gradient(180deg, #1b1b1b, #111);
+  padding: 60px;
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+
+.success-card h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.success-card p {
+  opacity: .7;
+  margin-bottom: 32px;
+}
+
+.success-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #e6e6e6);
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+}
+/* ===== CHECKOUT ITEM ===== */
+.checkout-item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.checkout-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.checkout-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.checkout-name {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.checkout-qty {
+  font-size: 12px;
+  opacity: .6;
+}
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s;
+  z-index: 9999;
+}
+
+.image-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.image-modal img {
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 16px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 40px;
+  cursor: pointer;
+}
+/* ===== ZOOM IMAGE ===== */
+.image-modal img {
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 16px;
+  cursor: zoom-in;
+  transition: transform .3s ease;
+}
+
+.image-modal img.zoomed {
+  cursor: grab;
+  transform: scale(2);
+}
+
+.image-modal img.zoomed:active {
+  cursor: grabbing;
+}
+/* ================= IMAGE MODAL RESPONSIVE ================= */
+
+/* desktop default */
+.image-modal img {
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 16px;
+  transition: transform .25s ease;
+  cursor: zoom-in;
+}
+
+/* zoomed (desktop) */
+.image-modal img.zoomed {
+  transform: scale(2);
+  cursor: grab;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+
+  .image-modal img {
+    max-width: 92%;
+    max-height: 70%;
+    border-radius: 14px;
+    cursor: default;
+  }
+
+  /* mobile zoom (ลด scale) */
+  .image-modal img.zoomed {
+    transform: scale(1.4);
+  }
+
+  .close-modal {
+    top: 16px;
+    right: 18px;
+    font-size: 32px;
+  }
+}
+/* ================= MOBILE OPTIMIZATION ================= */
+
+/* จอเล็กมาก (มือถือ) */
+@media (max-width: 480px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+/* ปุ่มกดง่ายขึ้นบนมือถือ */
+@media (max-width: 768px) {
+  .add-cart {
+    padding: 14px 0;
+    font-size: 14px;
+  }
+}
+
+/* จำกัดความยาวชื่อสินค้า */
+.product-card h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

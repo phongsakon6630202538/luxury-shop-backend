@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Luxury | Order Summary</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">LUXURY</div>
+    <nav class="menu">
+      <a href="index.html">Shop</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <section class="summary">
+    <div class="summary-container">
+        <h2>Order Summary</h2>
+        
+        <div id="summary-items"></div> 
+        
+        <hr style="border: 0.5px solid #444; margin: 20px 0;">
+        
+        <h3 id="summary-total" style="text-align: right; margin: 20px 0; color: white;"></h3>
+        
+        <button onclick="confirmOrder()" class="checkout-btn">Confirm Order</button>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

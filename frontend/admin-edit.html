@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">ADMIN</div>
+  <nav class="menu">
+    <a href="index.html">Shop</a>
+    <a href="admin.html">Add</a>
+  </nav>
+</header>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th>
+    </tr>
+  </thead>
+  <tbody id="admin-product-list"></tbody>
+</table>
+
+<div id="editModal" class="admin-modal">
+  <div class="admin-modal-content">
+    <input id="editId" hidden>
+
+    <input id="editName" placeholder="Product name">
+
+    <!-- ⭐ FIX: CATEGORY SELECT -->
+    <select id="editCategory">
+      <option value="Shirts">Shirts</option>
+      <option value="Pants">Pants</option>
+      <option value="Shoes">Shoes</option>
+      <option value="Hats">Hats</option>
+      <option value="Bags">Bags</option>
+      <option value="Accessories">Accessories</option>
+    </select>
+
+    <input id="editPrice" type="number" placeholder="Price">
+    <input id="editStock" type="number" placeholder="Stock">
+    <input id="editImage" placeholder="Image path">
+
+    <button onclick="saveEdit()">Save</button>
+    <button onclick="closeEdit()">Cancel</button>
+  </div>
+</div>
+
+
+<script>
+const editModal = document.getElementById("editModal");
+const editId = document.getElementById("editId");
+const editName = document.getElementById("editName");
+const editCategory = document.getElementById("editCategory");
+const editPrice = document.getElementById("editPrice");
+const editStock = document.getElementById("editStock");
+const editImage = document.getElementById("editImage");
+</script>
+
+<script src="app.js"></script>
+</body>
+</html>
