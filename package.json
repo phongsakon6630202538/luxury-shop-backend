@@ -1,0 +1,22 @@
+{
+  "name": "luxury-shop-backend",
+  "version": "1.0.0",
+  "description": "Luxury Shop Backend API",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phongsakon6630202538/luxury-shop-backend.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
