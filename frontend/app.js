@@ -1,4 +1,4 @@
-const API = `${location.protocol}//${location.hostname}:3000/products`;
+const API = "https://luxury-shop-backend.onrender.com/products";
 
 
 let products = [];
@@ -25,8 +25,6 @@ async function loadProducts() {
   products = data;
   renderProducts(products);
 }
-
-
 
 function renderProducts(list) {
   const container = document.getElementById("products");

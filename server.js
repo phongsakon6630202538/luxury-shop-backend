@@ -1,17 +1,15 @@
-/* ================= IMPORT ================= */
-require("dotenv").config({ path: __dirname + "/.env" });
-console.log("MONGO_URI =", process.env.MONGO_URI);
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+
 const Product = require("./models/Product");
 
-/* ================= INIT APP ================= */
-const app = express();
+const app = express(); // ✅ ต้องมาก่อนใช้ app
 
-/* ================= MIDDLEWARE ================= */
+// middleware
 app.use(cors());
 app.use(express.json());
 
