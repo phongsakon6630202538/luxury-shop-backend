@@ -1,23 +1,53 @@
 const API = "https://luxury-shop-backend.onrender.com";
 const PRODUCT_API = `${API}/products`;
 
-
+let adminProducts = [];
 let products = [];
+let adminCurrentCategory = "all";
+let adminSearchKeyword = "";
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 const quantities = {};
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadProducts();
-  if (document.getElementById("products")) loadProducts();
-  if (document.getElementById("cart-count")) updateCartCount();
-  if (document.getElementById("admin-product-list")) loadAdminProducts();
-  if (document.getElementById("cart-items")) renderCart();
+// ===== ADMIN EDIT ELEMENTS =====
+let editModal, editId, editName, editCategory, editPrice, editStock, editImage;
 
-  // image modal
-  window.imageModal = document.getElementById("image-modal");
-  window.imgFull = document.getElementById("img-full");
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ===== SHOP ===== */
+  if (document.getElementById("products")) {
+    loadProducts();
+  }
+
+  if (document.getElementById("cart-count")) {
+    updateCartCount();
+  }
+
+  /* ===== CART ===== */
+  if (document.getElementById("cart-items")) {
+    renderCart();
+  }
+
+  /* ===== ADMIN ===== */
+  if (document.getElementById("admin-product-list")) {
+    loadAdminProducts();
+
+    // 🔑 ผูก element เฉพาะหน้า admin-edit.html เท่านั้น
+    editModal     = document.getElementById("editModal");
+    editId        = document.getElementById("editId");
+    editName      = document.getElementById("editName");
+    editCategory  = document.getElementById("editCategory");
+    editPrice     = document.getElementById("editPrice");
+    editStock     = document.getElementById("editStock");
+    editImage     = document.getElementById("editImage");
+  }
+
+  /* ===== IMAGE MODAL (ถ้ามี) ===== */
+  window.imageModal   = document.getElementById("image-modal");
+  window.imgFull      = document.getElementById("img-full");
   window.modalCaption = document.getElementById("modal-caption");
 });
+
 
 /* ================= SHOP ================= */
 async function loadProducts() {
@@ -166,6 +196,11 @@ function addOneToCart(id) {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
 }
+function searchAdmin() {
+  const input = document.getElementById("admin-search");
+  adminSearchKeyword = input ? input.value.toLowerCase() : "";
+  renderAdminProducts();
+}
 
 function removeOneFromCart(id) {
   const item = cart.find(i => i.id === id);
@@ -279,16 +314,6 @@ function closeImageModal() {
   modal.classList.remove("show");
 }
 
-
-function closeImageModal() {
-  const modal = document.getElementById("imageModal");
-  const img = document.getElementById("modalImg");
-
-  img.classList.remove("zoomed");
-  img.style.transform = "scale(1) translate(0,0)";
-  modal.classList.remove("show");
-}
-
 // ===== IMAGE MODAL =====
 const imageModal = document.getElementById("imageModal");
 const modalImg = document.getElementById("modalImg");
@@ -296,76 +321,175 @@ const modalCaption = document.getElementById("modalCaption");
 
 /* ================= ADMIN ================= */
 async function loadAdminProducts() {
-  const res = await fetch(API);
-  const list = await res.json();
+  const res = await fetch(`${API}/products`);
+  adminProducts = await res.json();
+
+
+  const tbody = document.getElementById("admin-product-list");
+
+  tbody.innerHTML = "";
+
+  renderAdminProducts();
+}
+function deleteProduct(id) {
+  openConfirm("Delete this product?", async () => {
+
+    const res = await fetch(`${API}/products/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!res.ok) {
+      showToast("Delete failed");
+      return;
+    }
+
+    showToast("Product deleted");
+    loadAdminProducts(); // รีโหลดตาราง
+  });
+}
+
+
+function openEditById(id) {
+  const product = adminProducts.find(p => p._id === id);
+  if (!product) {
+    alert("Product not found");
+    return;
+  }
+
+  editModal.style.display = "flex";
+  editId.value = product._id;
+  editName.value = product.name;
+  editCategory.value = product.category;
+  editPrice.value = product.price;
+  editStock.value = product.stock;
+  editImage.value = product.image;
+}
+
+
+async function saveEdit() {
+  const id = editId.value;
+
+  const res = await fetch(`${API}/products/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: editName.value.trim(),
+      category: editCategory.value,
+      price: Number(editPrice.value),
+      stock: Number(editStock.value),
+      image: editImage.value.trim()
+    })
+  });
+
+  if (!res.ok) {
+    alert("Update failed");
+    return;
+  }
+
+  closeEdit();
+  loadAdminProducts(); // รีโหลดตาราง
+}
+
+function closeEdit() {
+  editModal.style.display = "none";
+}
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.innerText = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+let confirmCallback = null;
+
+function openConfirm(message, onYes) {
+  confirmCallback = onYes;
+  document.getElementById("confirmMessage").innerText = message;
+  document.getElementById("confirmModal").classList.add("show");
+}
+
+function closeConfirm() {
+  document.getElementById("confirmModal").classList.remove("show");
+  confirmCallback = null;
+}
+
+const confirmYesBtn = document.getElementById("confirmYes");
+if (confirmYesBtn) {
+  confirmYesBtn.onclick = () => {
+    if (confirmCallback) confirmCallback();
+    closeConfirm();
+  };
+}
+
+function filterAdmin(category) {
+  adminCurrentCategory = category;
+
+  // active button
+  document.querySelectorAll(".admin-filter button").forEach(btn => {
+    btn.classList.remove("active");
+
+    if (
+      btn.textContent === category ||
+      (category === "all" && btn.textContent === "All")
+    ) {
+      btn.classList.add("active");
+    }
+  });
+
+  renderAdminProducts();
+}
+function renderAdminProducts() {
   const tbody = document.getElementById("admin-product-list");
   if (!tbody) return;
 
   tbody.innerHTML = "";
-  list.forEach(p => {
-    tbody.innerHTML += `
-      <tr>
-        <td><img src="${p.image}" width="60"></td>
-        <td>${p.name}</td>
-        <td>${p.category}</td>
-        <td>${p.price}</td>
-        <td>${p.stock}</td>
-        <td>
-          <button class="btn-edit" onclick="openEdit('${p._id}')">Edit</button>
-          <button class="btn-delete" onclick="deleteProduct('${p._id}')">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
-}
 
-async function deleteProduct(id) {
-  if (!confirm("Delete?")) return;
-  await fetch(`${API}/${id}`, { method: "DELETE" });
-  loadAdminProducts();
-}
+  adminProducts
+    .filter(p => {
+      const keyword = adminSearchKeyword;
 
-async function openEdit(id) {
-  const p = await (await fetch(`${API}/${id}`)).json();
-
-  editId.value = p._id;
-  editName.value = p.name;
-  editCategory.value = p.category;
-  editPrice.value = p.price;
-  editStock.value = p.stock;
-  editImage.value = p.image;
-
-  editModal.classList.add("show");
-}
-
-async function saveEdit() {
-  await fetch(`${API}/${editId.value}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: editName.value,
-      category: editCategory.value,
-      price: Number(editPrice.value),
-      stock: Number(editStock.value),
-      image: editImage.value
+      return (
+        // filter หมวดจากปุ่ม
+        (adminCurrentCategory === "all" || p.category === adminCurrentCategory)
+        &&
+        // 🔍 search: ชื่อสินค้า OR หมวด
+        (
+          p.name.toLowerCase().includes(keyword) ||
+          p.category.toLowerCase().includes(keyword)
+        )
+      );
     })
-  });
-
-  closeEdit();
-  loadAdminProducts();
+    .forEach(p => {
+      tbody.innerHTML += `
+        <tr>
+          <td><img src="${p.image}" width="60"></td>
+          <td>${p.name}</td>
+          <td>${p.category}</td>
+          <td>${p.price}</td>
+          <td>${p.stock}</td>
+          <td>
+            <button class="btn-edit" onclick="openEditById('${p._id}')">Edit</button>
+            <button class="btn-delete" onclick="deleteProduct('${p._id}')">Delete</button>
+          </td>
+        </tr>
+      `;
+    });
 }
 
-function closeEdit() {
-  editModal.classList.remove("show");
-}
-let isDragging = false;
-let startX, startY;
-let currentX = 0, currentY = 0;
+
+
 
 const img = document.getElementById("modalImg");
+// ===== IMAGE DRAG STATE =====
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let currentX = 0;
+let currentY = 0;
 
-img.addEventListener("mousedown", e => {
-  if (!img.classList.contains("zoomed")) return;
+// ===== DRAG EVENTS =====
+modalImg.addEventListener("mousedown", e => {
+  if (!modalImg.classList.contains("zoomed")) return;
   isDragging = true;
   startX = e.clientX - currentX;
   startY = e.clientY - currentY;
@@ -375,12 +499,13 @@ document.addEventListener("mousemove", e => {
   if (!isDragging) return;
   currentX = e.clientX - startX;
   currentY = e.clientY - startY;
-  img.style.transform = `scale(2) translate(${currentX}px, ${currentY}px)`;
+  modalImg.style.transform = `scale(2) translate(${currentX}px, ${currentY}px)`;
 });
 
 document.addEventListener("mouseup", () => {
   isDragging = false;
 });
+
 /* ================= CHECKOUT ================= */
 
 const checkoutForm = document.getElementById("checkoutForm");

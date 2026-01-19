@@ -562,98 +562,110 @@ body { background:#111; color:#fff; font-family:serif; margin:0 }
 /* ===== ADMIN BUTTONS ===== */
 .btn-edit,
 .btn-delete {
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 8px 18px;
+  border-radius: 999px;          /* pill */
   font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .3px;
   cursor: pointer;
-  border: none;
   transition: all .25s ease;
 }
 
 /* EDIT */
 .btn-edit {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.3);
+  background: linear-gradient(180deg, #ffffff, #e6e6e6);
+  color: #000;
+  border: none;
+  box-shadow: 0 6px 14px rgba(255,255,255,.15);
 }
 
 .btn-edit:hover {
-  background: #fff;
-  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255,255,255,.25);
 }
 
 /* DELETE */
 .btn-delete {
-  background: transparent;
+   background: transparent;
   color: #ff6b6b;
-  border: 1px solid rgba(255,107,107,.4);
-  margin-left: 6px;
+  border: 1px solid rgba(255,107,107,.45);
+  margin-left: 8px;
 }
 
 .btn-delete:hover {
-  background: #ff6b6b;
+   background: #ff6b6b;
   color: #000;
+  box-shadow: 0 8px 18px rgba(255,107,107,.35);
 }
 /* ===== ADMIN EDIT MODAL ===== */
 .admin-modal {
-  position: fixed;           /* ⭐ สำคัญ */
+  position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.75);
-  display: flex;
-  align-items: center;
+  display: none;
   justify-content: center;
+  align-items: center;
   z-index: 9999;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
 }
 
-/* SHOW MODAL */
-.admin-modal.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* MODAL BOX */
-.admin-modal-content {
-  background: linear-gradient(180deg, #1a1a1a, #111);
-  border-radius: 16px;
-  padding: 28px;
-  width: 420px;
-  max-width: 90%;
+.admin-modal.show,
+.admin-modal[style*="flex"] {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
-/* INPUT */
-.admin-modal-content input {
-  padding: 10px 14px;
-  border-radius: 10px;
+/* BOX */
+.admin-modal-content {
+  width: 320px;
+  background: linear-gradient(180deg, #1a1a1a, #0f0f0f);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+
+/* INPUT / SELECT */
+.admin-modal-content input,
+.admin-modal-content select {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 11px 14px;
+  border-radius: 12px;
   border: 1px solid #333;
-  background: #0f0f0f;
+  background: #111;
   color: #fff;
+  font-size: 14px;
 }
 
-/* BUTTONS */
+.admin-modal-content input:focus,
+.admin-modal-content select:focus {
+  outline: none;
+  border-color: #666;
+}
+
+/* SAVE BUTTON */
 .admin-modal-content button {
+  width: 100%;
   margin-top: 10px;
-  padding: 10px;
+  padding: 12px;
   border-radius: 24px;
   border: none;
+  font-size: 14px;
   cursor: pointer;
 }
 
 .admin-modal-content button:first-of-type {
   background: #fff;
   color: #000;
+  font-weight: 500;
 }
 
+/* CANCEL */
 .admin-modal-content button:last-of-type {
+  margin-top: 8px;
   background: transparent;
   color: #aaa;
+  font-size: 13px;
 }
+
 /* ===== ADD PRODUCT PAGE ===== */
 .add-page {
   display: flex;
@@ -1084,4 +1096,145 @@ body { background:#111; color:#fff; font-family:serif; margin:0 }
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+/* ===== FIX ADMIN BUTTON CLICK ===== */
+.admin-table td {
+  position: relative;
+  z-index: 2;
+}
+
+.admin-table tbody tr {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-table button {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.admin-table tbody tr {
+  pointer-events: none;
+}
+
+.admin-table tbody tr td,
+.admin-table tbody tr button {
+  pointer-events: auto;
+}
+/* ===== ADMIN MODAL INPUT SAME HEIGHT ===== */
+.admin-modal-content input,
+.admin-modal-content select {
+  height: 46px;              /* ⭐ บังคับความสูง */
+  padding: 0 16px;           /* ตัด padding บนล่าง */
+  border-radius: 14px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+/* ================= LUXURY CONFIRM MODAL ================= */
+.lux-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.lux-modal.show {
+  display: flex;
+}
+
+/* ===== MODAL BOX ===== */
+.lux-modal-box {
+  width: 320px;
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 20px;
+  padding: 26px 24px 24px;
+  box-shadow: 0 40px 100px rgba(0,0,0,.7);
+  text-align: left;
+  animation: luxPop .35s ease;
+}
+
+/* animation */
+@keyframes luxPop {
+  from {
+    opacity: 0;
+    transform: scale(.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ===== TITLE ===== */
+.lux-modal-box h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+/* ===== MESSAGE ===== */
+.lux-modal-box p {
+  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+/* ===== ACTIONS ===== */
+.lux-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ===== COMMON BUTTON ===== */
+.lux-actions button {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all .25s ease;
+}
+
+/* ===== CANCEL ===== */
+.lux-actions .btn-cancel {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.25);
+  color: #ddd;
+}
+
+.lux-actions .btn-cancel:hover {
+  background: rgba(255,255,255,.1);
+}
+
+/* ===== DELETE (DANGER) ===== */
+.lux-actions .btn-danger {
+  background: linear-gradient(180deg, #ff6b6b, #ff3b3b);
+  color: #000;
+  font-weight: 500;
+}
+
+.lux-actions .btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(255,59,59,.4);
+}
+
+/* ===== ADD / CONFIRM ===== */
+.lux-actions .btn-confirm {
+  background: linear-gradient(180deg, #ffffff, #e6e6e6);
+  color: #000;
+  font-weight: 500;
+}
+
+.lux-actions .btn-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(255,255,255,.35);
 }
