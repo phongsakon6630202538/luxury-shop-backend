@@ -362,7 +362,6 @@ function openEditById(id) {
   editCategory.value = product.category;
   editPrice.value = product.price;
   editStock.value = product.stock;
-  editImage.value = product.image;
 }
 
 
