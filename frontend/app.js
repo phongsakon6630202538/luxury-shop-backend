@@ -367,18 +367,20 @@ function openEditById(id) {
 
 
 async function saveEdit() {
-  const id = editId.value;
+  const formData = new FormData();
+  formData.append("name", editName.value.trim());
+  formData.append("category", editCategory.value);
+  formData.append("price", editPrice.value);
+  formData.append("stock", editStock.value);
 
-  const res = await fetch(`${API}/products/${id}`, {
+  // ✅ ถ้าเลือกไฟล์ใหม่
+  if (editImage.files[0]) {
+    formData.append("image", editImage.files[0]);
+  }
+
+  const res = await fetch(`${API}/products/${editId.value}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: editName.value.trim(),
-      category: editCategory.value,
-      price: Number(editPrice.value),
-      stock: Number(editStock.value),
-      image: editImage.value.trim()
-    })
+    body: formData
   });
 
   if (!res.ok) {
@@ -387,8 +389,17 @@ async function saveEdit() {
   }
 
   closeEdit();
-  loadAdminProducts(); // รีโหลดตาราง
+  loadAdminProducts();
 }
+
+
+  if (!res.ok) {
+    alert("Update failed");
+    return;
+  }
+
+  closeEdit();
+  loadAdminProducts(); // รีโหลดตาราง
 
 function closeEdit() {
   editModal.style.display = "none";

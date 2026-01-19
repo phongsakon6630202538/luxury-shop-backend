@@ -91,18 +91,33 @@ app.post("/products", upload.single("image"), async (req, res) => {
 });
 
 /* PUT update product (no image change) */
-app.put("/products/:id", async (req, res) => {
+app.put("/products/:id", upload.single("image"), async (req, res) => {
   try {
+    const updateData = {
+      name: req.body.name,
+      category: req.body.category,
+      price: Number(req.body.price),
+      stock: Number(req.body.stock)
+    };
+
+    // ✅ ถ้าเลือกไฟล์ใหม่ → เปลี่ยนรูป
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
+
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true }
     );
+
     res.json(updated);
   } catch (err) {
+    console.error("EDIT ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
+
 
 /* DELETE product */
 app.delete("/products/:id", async (req, res) => {
