@@ -3,9 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
 const multer = require("multer");
-const fs = require("fs");
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Product = require("./models/Product");
 
@@ -15,24 +16,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* ================= STATIC ================= */
-// frontend
-app.use(express.static(path.join(__dirname, "frontend")));
-
-// uploads (images)
-const uploadDir = path.join(__dirname, "uploads");
-
-// ✅ สร้างโฟลเดอร์ uploads อัตโนมัติ ถ้ายังไม่มี
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-app.use("/uploads", express.static(uploadDir));
-
-/* ================= UPLOAD CONFIG ================= */
-const upload = multer({
-  dest: uploadDir
+/* ================= CLOUDINARY CONFIG ================= */
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+/* ================= MULTER → CLOUDINARY ================= */
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "luxury-shop",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"]
+  }
+});
+
+const upload = multer({ storage });
 
 /* ================= MongoDB ================= */
 mongoose.connect(process.env.MONGO_URI)
@@ -56,23 +56,11 @@ app.get("/products", async (req, res) => {
   }
 });
 
-/* GET product by id */
-app.get("/products/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Not found" });
-    res.json(product);
-  } catch {
-    res.status(400).json({ message: "Invalid ID" });
-  }
-});
-
-/* ================= ADD PRODUCT (UPLOAD IMAGE) ================= */
+/* ================= ADD PRODUCT (CLOUDINARY) ================= */
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
-    // ✅ ป้องกัน error ถ้าไม่มีไฟล์
     if (!req.file) {
-      return res.status(400).json({ error: "Image file is required" });
+      return res.status(400).json({ error: "Image is required" });
     }
 
     const product = await Product.create({
@@ -80,17 +68,17 @@ app.post("/products", upload.single("image"), async (req, res) => {
       category: req.body.category,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
-      image: `/uploads/${req.file.filename}`
+      image: req.file.path // ⭐ Cloudinary URL
     });
 
     res.status(201).json(product);
   } catch (err) {
-    console.error("ADD PRODUCT ERROR:", err);
+    console.error("ADD ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-/* PUT update product (no image change) */
+/* ================= EDIT PRODUCT (CLOUDINARY) ================= */
 app.put("/products/:id", upload.single("image"), async (req, res) => {
   try {
     const updateData = {
@@ -100,9 +88,8 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
       stock: Number(req.body.stock)
     };
 
-    // ✅ ถ้าเลือกไฟล์ใหม่ → เปลี่ยนรูป
     if (req.file) {
-      updateData.image = `/uploads/${req.file.filename}`;
+      updateData.image = req.file.path; // ⭐ URL ใหม่
     }
 
     const updated = await Product.findByIdAndUpdate(
@@ -118,7 +105,6 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
   }
 });
 
-
 /* DELETE product */
 app.delete("/products/:id", async (req, res) => {
   try {
@@ -129,41 +115,8 @@ app.delete("/products/:id", async (req, res) => {
   }
 });
 
-/* POST checkout */
-app.post("/checkout", async (req, res) => {
-  try {
-    const { cart } = req.body;
-
-    if (!cart || cart.length === 0) {
-      return res.status(400).json({ error: "Cart is empty" });
-    }
-
-    for (const item of cart) {
-      const product = await Product.findById(item.id);
-
-      if (!product) {
-        return res.status(404).json({ error: "Product not found" });
-      }
-
-      if (product.stock < item.qty) {
-        return res.status(400).json({
-          error: `Not enough stock for ${product.name}`
-        });
-      }
-
-      product.stock -= item.qty;
-      await product.save();
-    }
-
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 /* ================= START SERVER ================= */
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
