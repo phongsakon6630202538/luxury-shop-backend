@@ -375,14 +375,7 @@ async function saveEdit() {
     body: formData
   });
 
-  if (!res.ok) {
-    alert("Update failed");
-    return;
-  }
-
-  closeEdit();
-  loadAdminProducts();
-}
+  
 
 
   if (!res.ok) {
