@@ -127,11 +127,33 @@ app.listen(PORT, () => {
 });
 app.post("/checkout", async (req, res) => {
   try {
-    console.log("ORDER:", req.body);
+    const { cart } = req.body;
 
-    // ตอนนี้ยังไม่บันทึก DB ก็ได้
-    res.json({ message: "Order received" });
+    if (!cart || cart.length === 0) {
+      return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    // 🔥 ลด stock ทีละสินค้า
+    for (const item of cart) {
+      const product = await Product.findById(item.id);
+
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      if (product.stock < item.qty) {
+        return res.status(400).json({
+          error: `Not enough stock for ${product.name}`
+        });
+      }
+
+      product.stock -= item.qty;
+      await product.save();
+    }
+
+    res.json({ message: "Checkout success" });
   } catch (err) {
+    console.error("CHECKOUT ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
