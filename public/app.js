@@ -336,9 +336,15 @@ function updateCartCount() {
 
 
 function searchProducts() {
-  const k = document.getElementById("search-input").value.toLowerCase();
-  renderProducts(products.filter(p => p.name.toLowerCase().includes(k)));
+  const input = document.getElementById("search-input");
+  if (!input) return; // ⭐ กัน null ทุกหน้า
+
+  const k = input.value.toLowerCase();
+  renderProducts(
+    products.filter(p => p.name.toLowerCase().includes(k))
+  );
 }
+
 function filterByCategory(cat) {
   if (cat === "All") {
     renderProducts(products);
