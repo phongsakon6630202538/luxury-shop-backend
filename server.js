@@ -97,6 +97,7 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
       stock: Number(req.body.stock)
     };
 
+    // ✅ ถ้าเลือกไฟล์ใหม่ ค่อยอัปเดตรูป
     if (req.file) {
       updateData.image = `/uploads/${req.file.filename}`;
     }
@@ -109,9 +110,11 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
 
     res.json(updated);
   } catch (err) {
+    console.error("EDIT ERROR:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
+
 
 /* DELETE product */
 app.delete("/products/:id", async (req, res) => {
