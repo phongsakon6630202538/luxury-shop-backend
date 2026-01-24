@@ -125,3 +125,13 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+app.post("/checkout", async (req, res) => {
+  try {
+    console.log("ORDER:", req.body);
+
+    // ตอนนี้ยังไม่บันทึก DB ก็ได้
+    res.json({ message: "Order received" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
