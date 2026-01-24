@@ -35,9 +35,15 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 /* ================= MongoDB ================= */
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Atlas Connected"))
-  .catch(err => console.error(err));
+  .catch(err => console.error("MongoDB Error:", err));
+
+/* ================= ROOT ================= */
+app.get("/", (req, res) => {
+  res.send("Luxury Shop Backend is running 🚀");
+});
 
 /* ================= API ================= */
 
@@ -56,7 +62,7 @@ app.get("/products", async (req, res) => {
   }
 });
 
-/* ================= ADD PRODUCT (CLOUDINARY) ================= */
+/* ADD product (Cloudinary) */
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -68,7 +74,7 @@ app.post("/products", upload.single("image"), async (req, res) => {
       category: req.body.category,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
-      image: req.file.path // ⭐ Cloudinary URL
+      image: req.file.path // Cloudinary URL
     });
 
     res.status(201).json(product);
@@ -78,7 +84,7 @@ app.post("/products", upload.single("image"), async (req, res) => {
   }
 });
 
-/* ================= EDIT PRODUCT (CLOUDINARY) ================= */
+/* EDIT product */
 app.put("/products/:id", upload.single("image"), async (req, res) => {
   try {
     const updateData = {
@@ -89,7 +95,7 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
     };
 
     if (req.file) {
-      updateData.image = req.file.path; // ⭐ URL ใหม่
+      updateData.image = req.file.path;
     }
 
     const updated = await Product.findByIdAndUpdate(
