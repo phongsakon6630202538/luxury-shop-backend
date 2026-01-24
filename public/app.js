@@ -350,24 +350,25 @@ function openEditById(id) {
 }
 
 async function saveEdit() {
+  if (!editId || !editName || !editCategory || !editPrice || !editStock) {
+    alert("Edit form not ready");
+    return;
+  }
+
   const formData = new FormData();
   formData.append("name", editName.value.trim());
   formData.append("category", editCategory.value);
   formData.append("price", editPrice.value);
   formData.append("stock", editStock.value);
 
-  // ✅ ถ้าเลือกไฟล์ใหม่
   if (editImage.files[0]) {
     formData.append("image", editImage.files[0]);
   }
 
-  const res = await fetch(`${API}/products/${editId.value}`, {
+  const res = await fetch(`/products/${editId.value}`, {
     method: "PUT",
     body: formData
   });
-
-
-
 
   if (!res.ok) {
     alert("Update failed");
@@ -375,7 +376,7 @@ async function saveEdit() {
   }
 
   closeEdit();
-  loadAdminProducts(); // รีโหลดตาราง
+  loadAdminProducts();
 }
 
 function closeEdit() {
