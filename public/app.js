@@ -122,12 +122,16 @@ async function saveEdit() {
 }
 
 /* ================= INIT ================= */
-document.addEventListener("DOMContentLoaded", () => {
-  loadProducts();        // 👈 โหลดสินค้า (Shop)
-  updateCartCount();     // 👈 อัปเดต cart (ถ้ามี)
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadProducts();     // ⭐ รอให้ products โหลดเสร็จก่อน
+  updateCartCount();
 
   if (document.getElementById("admin-product-list")) {
-    loadAdminProducts(); // 👈 เฉพาะหน้า admin
+    loadAdminProducts();
+  }
+
+  if (document.getElementById("cart-items")) {
+    renderCart();           // ⭐ ตอนนี้ products มีข้อมูลแล้ว
   }
 
   const searchInput = document.getElementById("search-input");
@@ -135,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.addEventListener("keyup", searchProducts);
   }
 });
+
 
 /* ================= SHOP ================= */
 async function loadProducts() {
