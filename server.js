@@ -68,11 +68,12 @@ app.get("/products", async (req, res) => {
 /* ADD product */
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
-    console.log("BODY:", JSON.stringify(req.body, null, 2));
-    console.log("FILE:", JSON.stringify(req.file, null, 2));
+    console.log("=== ADD PRODUCT ===");
+    console.log("BODY =", JSON.stringify(req.body, null, 2));
+    console.log("FILE =", req.file ? req.file : "NO FILE");
 
     if (!req.file) {
-      return res.status(400).json({ error: "Image is required" });
+      throw new Error("NO_FILE_RECEIVED");
     }
 
     const product = await Product.create({
@@ -84,12 +85,18 @@ app.post("/products", upload.single("image"), async (req, res) => {
     });
 
     res.status(201).json(product);
+
   } catch (err) {
-    console.error("ADD ERROR:", err.message);
-    console.error(err.stack); // ⭐ สำคัญมาก
-    res.status(500).json({ error: err.message });
+    console.error("=== ADD ERROR ===");
+    console.error("MESSAGE:", err.message);
+    console.error("STACK:", err.stack);
+
+    res.status(500).json({
+      error: err.message || "Add product failed"
+    });
   }
 });
+
 
 
 
