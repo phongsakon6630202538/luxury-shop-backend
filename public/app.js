@@ -300,7 +300,7 @@ function searchProducts() {
 }
 
 function filterByCategory(category) {
-  const list = $("products");
+  const list = document.getElementById("products");
   if (!list) return;
 
   if (category === "All" || category === "all") {
@@ -314,6 +314,7 @@ function filterByCategory(category) {
 
   renderProducts(filtered);
 }
+
 
 
 /* ================= CART PAGE ================= */
