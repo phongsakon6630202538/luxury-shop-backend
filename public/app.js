@@ -209,16 +209,7 @@ function updateCartCount() {
   el.innerText = `(${cart.reduce((s, i) => s + i.qty, 0)})`;
 }
 
-/* ===== Filter + Search ===== */
-function filterByCategory(cat, btn) {
-  document.querySelectorAll(".category-menu button")
-    .forEach(b => b.classList.remove("active"));
 
-  if (btn) btn.classList.add("active");
-
-  if (cat === "All") renderProducts(products);
-  else renderProducts(products.filter(p => p.category === cat));
-}
 
 function searchProducts() {
   const k = document.getElementById("search-input").value.toLowerCase();
@@ -375,7 +366,7 @@ async function saveEdit() {
     body: formData
   });
 
-  
+
 
 
   if (!res.ok) {
@@ -385,6 +376,7 @@ async function saveEdit() {
 
   closeEdit();
   loadAdminProducts(); // รีโหลดตาราง
+}
 
 function closeEdit() {
   editModal.style.display = "none";
@@ -540,4 +532,4 @@ if (checkoutForm) {
       console.error(err);
     }
   });
-}
+} 
