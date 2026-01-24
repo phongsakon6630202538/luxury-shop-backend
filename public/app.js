@@ -123,10 +123,19 @@ async function saveEdit() {
 
 /* ================= INIT ================= */
 document.addEventListener("DOMContentLoaded", () => {
+  loadProducts();        // 👈 โหลดสินค้า (Shop)
+  updateCartCount();     // 👈 อัปเดต cart (ถ้ามี)
+
   if (document.getElementById("admin-product-list")) {
-    loadAdminProducts();
+    loadAdminProducts(); // 👈 เฉพาะหน้า admin
+  }
+
+  const searchInput = document.getElementById("search-input");
+  if (searchInput) {
+    searchInput.addEventListener("keyup", searchProducts);
   }
 });
+
 /* ================= SHOP ================= */
 async function loadProducts() {
   const res = await fetch(PRODUCT_API);
