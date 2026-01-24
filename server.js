@@ -68,6 +68,9 @@ app.get("/products", async (req, res) => {
 /* ADD product */
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file); // 👈 สำคัญ
+
     if (!req.file) {
       return res.status(400).json({ error: "Image is required" });
     }
@@ -82,9 +85,11 @@ app.post("/products", upload.single("image"), async (req, res) => {
 
     res.status(201).json(product);
   } catch (err) {
+    console.error("ADD ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
+
 
 /* EDIT product */
 app.put("/products/:id", upload.single("image"), async (req, res) => {
