@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Edit Product</title>
+  <title>Admin Edit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,31 +11,68 @@
 <header class="navbar">
   <div class="logo">LUXURY</div>
   <nav class="menu">
-    <a href="admin.html">Back</a>
+    <a href="index.html">Shop</a>
+    <a href="admin.html" class="active">Admin</a>
   </nav>
 </header>
 
 <section class="admin-section">
-  <h2>Edit Product</h2>
-
-  <input id="editName" placeholder="Product name">
-
-  <select id="editCategory">
-    <option value="Shirts">Shirts</option>
-    <option value="Pants">Pants</option>
-    <option value="Shoes">Shoes</option>
-    <option value="Bags">Bags</option>
-    <option value="Hats">Hats</option>
-    <option value="Accessories">Accessories</option>
-  </select>
-
-  <input id="editPrice" type="number" placeholder="Price">
-  <input id="editStock" type="number" placeholder="Stock">
-  <input id="editImage" type="file" accept="image/*">
-
-  <button onclick="saveEdit()">Save</button>
+  <h2>Products</h2>
+  <table id="adminTable"></table>
 </section>
 
-<script src="app.js" defer></script>
+<!-- ================= EDIT MODAL ================= -->
+<div id="editModal" class="admin-modal">
+  <div class="admin-modal-content">
+
+    <h3>Edit Product</h3>
+
+    <!-- สำคัญ -->
+    <input id="editId" type="hidden">
+
+    <input
+      id="editName"
+      type="text"
+      placeholder="Product name"
+    >
+
+    <select id="editCategory">
+      <option value="Shirts">Shirts</option>
+      <option value="Pants">Pants</option>
+      <option value="Shoes">Shoes</option>
+      <option value="Bags">Bags</option>
+      <option value="Hats">Hats</option>
+      <option value="Accessories">Accessories</option>
+    </select>
+
+    <!-- ตัวที่คุณขาดไปก่อนหน้า -->
+    <input
+      id="editPrice"
+      type="number"
+      placeholder="Price"
+    >
+
+    <input
+      id="editStock"
+      type="number"
+      placeholder="Stock"
+    >
+
+    <input
+      id="editImage"
+      type="file"
+      accept="image/*"
+    >
+
+    <div class="admin-modal-actions">
+      <button onclick="saveEdit()">Save</button>
+      <button onclick="closeEdit()">Cancel</button>
+    </div>
+
+  </div>
+</div>
+<!-- ============================================= -->
+
+<script src="app.js"></script>
 </body>
 </html>
