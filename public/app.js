@@ -299,13 +299,22 @@ function searchProducts() {
   );
 }
 
-function filterByCategory(cat) {
-  if (cat === "All") {
+function filterByCategory(category) {
+  const list = $("products");
+  if (!list) return;
+
+  if (category === "All" || category === "all") {
     renderProducts(products);
-  } else {
-    renderProducts(products.filter(p => p.category === cat));
+    return;
   }
+
+  const filtered = products.filter(
+    p => p.category.toLowerCase() === category.toLowerCase()
+  );
+
+  renderProducts(filtered);
 }
+
 
 /* ================= CART PAGE ================= */
 function renderCart() {
