@@ -336,6 +336,20 @@ function deleteProduct(id) {
 
 
 function openEditById(id) {
+  // 🔑 ผูก element ตอนใช้งานจริง (กัน null)
+  const editModal    = document.getElementById("editModal");
+  const editId       = document.getElementById("editId");
+  const editName     = document.getElementById("editName");
+  const editCategory = document.getElementById("editCategory");
+  const editPrice    = document.getElementById("editPrice");
+  const editStock    = document.getElementById("editStock");
+  const editImage    = document.getElementById("editImage");
+
+  if (!editModal || !editId || !editName || !editCategory || !editPrice || !editStock) {
+    alert("Edit modal element not found");
+    return;
+  }
+
   const product = adminProducts.find(p => p._id === id);
   if (!product) {
     alert("Product not found");
@@ -343,12 +357,14 @@ function openEditById(id) {
   }
 
   editModal.style.display = "flex";
-  editId.value = product._id;
-  editName.value = product.name;
+  editId.value       = product._id;
+  editName.value     = product.name;
   editCategory.value = product.category;
-  editPrice.value = product.price;
-  editStock.value = product.stock;
+  editPrice.value    = product.price;
+  editStock.value    = product.stock;
+  editImage.value    = ""; // reset file
 }
+
 
 async function saveEdit() {
   if (!editId || !editName || !editCategory || !editPrice || !editStock) {
