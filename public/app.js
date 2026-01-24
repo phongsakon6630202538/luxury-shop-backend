@@ -75,11 +75,11 @@ async function addProduct() {
 
 /* ================= LOAD ADMIN PRODUCTS ================= */
 async function loadAdminProducts() {
-  const res = await fetch(`${API}/products`);
-  const products = await res.json();
-
   const list = document.getElementById("admin-product-list");
-  if (!list) return;
+  if (!list) return; // ⭐ แก้ตรงนี้
+
+  const res = await fetch(PRODUCT_API);
+  const products = await res.json();
 
   list.innerHTML = "";
 
@@ -98,6 +98,7 @@ async function loadAdminProducts() {
     `;
   });
 }
+
 
 /* ================= GO EDIT PAGE ================= */
 function goEdit(id) {
