@@ -1,15 +1,11 @@
-console.log("🔥 SERVER VERSION: ADD DEBUG V2 🔥");
+console.log("🔥 SERVER VERSION: LOCAL UPLOAD 🔥");
 require("dotenv").config();
-
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
-
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Product = require("./models/Product");
 
@@ -22,19 +18,16 @@ app.use(express.json());
 /* ================= STATIC FRONTEND ================= */
 app.use(express.static(path.join(__dirname, "public")));
 
-/* ================= CLOUDINARY CONFIG ================= */
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+/* ================= STATIC UPLOADS ================= */
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-/* ================= MULTER → CLOUDINARY ================= */
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "luxury-shop",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"]
+/* ================= MULTER (LOCAL STORAGE) ================= */
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
   }
 });
 
@@ -52,6 +45,7 @@ app.get("/", (req, res) => {
 });
 
 /* ================= API ================= */
+
 /* GET all products */
 app.get("/products", async (req, res) => {
   try {
@@ -67,15 +61,15 @@ app.get("/products", async (req, res) => {
   }
 });
 
-/* ADD product */
+/* ADD product (LOCAL UPLOAD) */
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
     console.log("=== ADD PRODUCT ===");
-    console.log("BODY =", JSON.stringify(req.body, null, 2));
-    console.log("FILE =", req.file ? req.file : "NO FILE");
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
     if (!req.file) {
-      throw new Error("NO_FILE_RECEIVED");
+      return res.status(400).json({ error: "Image is required" });
     }
 
     const product = await Product.create({
@@ -83,24 +77,15 @@ app.post("/products", upload.single("image"), async (req, res) => {
       category: req.body.category,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
-      image: req.file.path
+      image: `/uploads/${req.file.filename}` // ⭐ local image path
     });
 
     res.status(201).json(product);
-
   } catch (err) {
-    console.error("=== ADD ERROR ===");
-    console.error("MESSAGE:", err.message);
-    console.error("STACK:", err.stack);
-
-    res.status(500).json({
-      error: err.message || "Add product failed"
-    });
+    console.error("ADD ERROR:", err.message);
+    res.status(500).json({ error: err.message });
   }
 });
-
-
-
 
 /* EDIT product */
 app.put("/products/:id", upload.single("image"), async (req, res) => {
@@ -112,7 +97,9 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
       stock: Number(req.body.stock)
     };
 
-    if (req.file) updateData.image = req.file.path;
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
 
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
@@ -136,11 +123,7 @@ app.delete("/products/:id", async (req, res) => {
   }
 });
 
-/* ================= START SERVER ================= */
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("Server running on port", PORT);
-});
+/* ================= CHECKOUT (REDUCE STOCK) ================= */
 app.post("/checkout", async (req, res) => {
   try {
     const { cart } = req.body;
@@ -149,7 +132,6 @@ app.post("/checkout", async (req, res) => {
       return res.status(400).json({ error: "Cart is empty" });
     }
 
-    // 🔥 ลด stock ทีละสินค้า
     for (const item of cart) {
       const product = await Product.findById(item.id);
 
@@ -169,7 +151,13 @@ app.post("/checkout", async (req, res) => {
 
     res.json({ message: "Checkout success" });
   } catch (err) {
-    console.error("CHECKOUT ERROR:", err);
+    console.error("CHECKOUT ERROR:", err.message);
     res.status(500).json({ error: err.message });
   }
+});
+
+/* ================= START SERVER ================= */
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
 });
