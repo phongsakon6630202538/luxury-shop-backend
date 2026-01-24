@@ -162,20 +162,7 @@ document.addEventListener("click", e => {
   }
 });
 
-function removeOneFromCart(id) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
 
-  item.qty -= 1;
-
-  // ถ้าเหลือ 0 → ลบออก
-  if (item.qty <= 0) {
-    cart = cart.filter(i => i.id !== id);
-  }
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartCount();
-}
 function addOneToCart(id) {
   const p = products.find(x => x._id === id);
   if (!p) return;
@@ -236,6 +223,13 @@ function filterByCategory(cat, btn) {
 function searchProducts() {
   const k = document.getElementById("search-input").value.toLowerCase();
   renderProducts(products.filter(p => p.name.toLowerCase().includes(k)));
+}
+function filterByCategory(cat) {
+  if (cat === "All") {
+    renderProducts(products);
+  } else {
+    renderProducts(products.filter(p => p.category === cat));
+  }
 }
 
 /* ================= CART PAGE ================= */
@@ -363,7 +357,6 @@ function openEditById(id) {
   editPrice.value = product.price;
   editStock.value = product.stock;
 }
-
 
 async function saveEdit() {
   const formData = new FormData();
