@@ -28,18 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCart();
   }
 
-  /* ===== ADMIN ===== */
-  if (document.getElementById("admin-product-list")) {
+  /* ===== ADMIN (EDIT MODAL) ===== */
+  editModal    = document.getElementById("editModal");
+
+  // 👉 ถ้ามี modal แสดงว่าอยู่หน้า admin-edit.html
+  if (editModal) {
     loadAdminProducts();
 
-    // 🔑 ผูก element เฉพาะหน้า admin-edit.html เท่านั้น
-    editModal     = document.getElementById("editModal");
-    editId        = document.getElementById("editId");
-    editName      = document.getElementById("editName");
-    editCategory  = document.getElementById("editCategory");
-    editPrice     = document.getElementById("editPrice");
-    editStock     = document.getElementById("editStock");
-    editImage     = document.getElementById("editImage");
+    editId       = document.getElementById("editId");
+    editName     = document.getElementById("editName");
+    editCategory = document.getElementById("editCategory");
+    editPrice    = document.getElementById("editPrice");
+    editStock    = document.getElementById("editStock");
+    editImage    = document.getElementById("editImage");
   }
 
   /* ===== IMAGE MODAL (ถ้ามี) ===== */
