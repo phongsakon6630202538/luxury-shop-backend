@@ -1,6 +1,7 @@
 const API = "https://luxury-shop-backend.onrender.com";
 const PRODUCT_API = `${API}/products`;
 
+
 let adminProducts = [];
 let products = [];
 let adminCurrentCategory = "all";
@@ -49,7 +50,128 @@ document.addEventListener("DOMContentLoaded", () => {
   window.modalCaption = document.getElementById("modal-caption");
 });
 
+/* ================= ADD PRODUCT ================= */
+async function addProduct() {
+  const formData = new FormData();
 
+  formData.append("name", document.getElementById("name").value);
+  formData.append("category", document.getElementById("category").value);
+  formData.append("price", document.getElementById("price").value);
+  formData.append("stock", document.getElementById("stock").value);
+  formData.append("image", document.getElementById("image").files[0]);
+
+  const res = await fetch(`${API}/products`, {
+    method: "POST",
+    body: formData
+  });
+
+  if (!res.ok) {
+    alert("Add failed");
+    return;
+  }
+
+  loadAdminProducts();
+}
+
+/* ================= LOAD ADMIN PRODUCTS ================= */
+async function loadAdminProducts() {
+  const res = await fetch(`${API}/products`);
+  const products = await res.json();
+
+  const list = document.getElementById("admin-product-list");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  products.forEach(p => {
+    list.innerHTML += `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.category}</td>
+        <td>${p.price}</td>
+        <td>${p.stock}</td>
+        <td>
+          <button onclick="goEdit('${p._id}')">Edit</button>
+          <button onclick="deleteProduct('${p._id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+/* ================= GO EDIT PAGE ================= */
+function goEdit(id) {
+  window.location.href = `admin-edit.html?id=${id}`;
+}
+
+/* ================= DELETE ================= */
+async function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+
+  await fetch(`${API}/products/${id}`, {
+    method: "DELETE"
+  });
+
+  loadAdminProducts();
+}
+
+/* ================= EDIT PAGE LOGIC ================= */
+const params = new URLSearchParams(window.location.search);
+const editProductId = params.get("id");
+
+if (editProductId) {
+  loadEditProduct(editProductId);
+}
+
+async function loadEditProduct(id) {
+  const res = await fetch(`${API}/products`);
+  const products = await res.json();
+
+  const product = products.find(p => p._id === id);
+  if (!product) {
+    alert("Product not found");
+    return;
+  }
+
+  document.getElementById("editName").value = product.name;
+  document.getElementById("editCategory").value = product.category;
+  document.getElementById("editPrice").value = product.price;
+  document.getElementById("editStock").value = product.stock;
+}
+
+async function saveEdit() {
+  const formData = new FormData();
+
+  formData.append("name", document.getElementById("editName").value);
+  formData.append("category", document.getElementById("editCategory").value);
+  formData.append("price", document.getElementById("editPrice").value);
+  formData.append("stock", document.getElementById("editStock").value);
+
+  const image = document.getElementById("editImage").files[0];
+  if (image) {
+    formData.append("image", image);
+  }
+
+  const res = await fetch(`${API}/products/${editProductId}`, {
+    method: "PUT",
+    body: formData
+  });
+
+  if (!res.ok) {
+    alert("Update failed");
+    return;
+  }
+
+  alert("Updated");
+  window.location.href = "admin.html";
+}
+
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("admin-product-list")) {
+    loadAdminProducts();
+  }
+});
 /* ================= SHOP ================= */
 async function loadProducts() {
   const res = await fetch(PRODUCT_API);

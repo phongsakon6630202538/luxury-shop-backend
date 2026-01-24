@@ -1,99 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin</title>
+  <meta charset="UTF-8">
+  <title>Edit Product</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="navbar">
-  <div class="logo">ADMIN</div>
+  <div class="logo">LUXURY</div>
   <nav class="menu">
-    <a href="index.html">Shop</a>
-    <a href="admin.html">Add</a>
+    <a href="admin.html">Back</a>
   </nav>
 </header>
 
-<!-- ================= ADMIN FILTER + SEARCH ================= -->
-<div class="search-container">
-  <input
-    id="admin-search"
-    type="text"
-    placeholder="Search product name…"
-    oninput="searchAdmin()"
-  >
-</div>
+<section class="admin-section">
+  <h2>Edit Product</h2>
 
-<div class="category-menu admin-filter">
-  <button class="active" onclick="filterAdmin('all')">All</button>
-  <button onclick="filterAdmin('Shirts')">Shirts</button>
-  <button onclick="filterAdmin('Pants')">Pants</button>
-  <button onclick="filterAdmin('Shoes')">Shoes</button>
-  <button onclick="filterAdmin('Hats')">Hats</button>
-  <button onclick="filterAdmin('Bags')">Bags</button>
-  <button onclick="filterAdmin('Accessories')">Accessories</button>
-</div>
+  <input id="editName" placeholder="Product name">
 
-<!-- ================= ADMIN TABLE ================= -->
-<table class="admin-table">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="admin-product-list"></tbody>
-</table>
+  <select id="editCategory">
+    <option value="Shirts">Shirts</option>
+    <option value="Pants">Pants</option>
+    <option value="Shoes">Shoes</option>
+    <option value="Bags">Bags</option>
+    <option value="Hats">Hats</option>
+    <option value="Accessories">Accessories</option>
+  </select>
 
-<!-- ================= EDIT MODAL ================= -->
-<div id="editModal" class="admin-modal">
-  <div class="admin-modal-content">
+  <input id="editPrice" type="number" placeholder="Price">
+  <input id="editStock" type="number" placeholder="Stock">
+  <input id="editImage" type="file" accept="image/*">
 
-    <input id="editId" type="hidden" readonly>
+  <button onclick="saveEdit()">Save</button>
+</section>
 
-    <input id="editName" placeholder="Product name">
-
-    <select id="editCategory">
-      <option value="Shirts">Shirts</option>
-      <option value="Pants">Pants</option>
-      <option value="Shoes">Shoes</option>
-      <option value="Hats">Hats</option>
-      <option value="Bags">Bags</option>
-      <option value="Accessories">Accessories</option>
-    </select>
-
-    <input
-  id="editImage"
-  type="file"
-  accept="image/*"
-/>
-
-
-
-    <button onclick="saveEdit()">Save</button>
-    <button onclick="closeEdit()">Cancel</button>
-  </div>
-</div>
-
-<!-- ================= CONFIRM DELETE MODAL ================= -->
-<div id="confirmModal" class="lux-modal">
-  <div class="lux-modal-box">
-    <h3>Confirm</h3>
-    <p id="confirmMessage">Are you sure?</p>
-    <div class="lux-actions">
-      <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
-      <button class="btn-danger" id="confirmYes">Delete</button>
-    </div>
-  </div>
-</div>
-
-<!-- ================= TOAST ================= -->
-<div id="toast" class="lux-toast"></div>
-
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 </body>
 </html>

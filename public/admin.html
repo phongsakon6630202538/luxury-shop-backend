@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Add Product</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -11,63 +12,48 @@
   <div class="logo">LUXURY</div>
   <nav class="menu">
     <a href="index.html">Shop</a>
-    <a href="admin-edit.html" class="active">Admin</a>
+    <a href="admin.html" class="active">Admin</a>
   </nav>
 </header>
 
-<section class="add-page">
-  <form id="addForm" class="add-card">
-    <h3>Add New Product</h3>
+<section class="admin-section">
 
-    <input id="name" placeholder="Product name" required>
+  <h2>Add New Product</h2>
 
-    <select id="category" required>
-      <option value="">Select category</option>
-      <option value="Shirts">Shirts</option>
-      <option value="Pants">Pants</option>
-      <option value="Shoes">Shoes</option>
-      <option value="Hats">Hats</option>
-      <option value="Bags">Bags</option>
-      <option value="Accessories">Accessories</option>
-    </select>
+  <input id="name" placeholder="Product name">
+  <select id="category">
+    <option value="Shirts">Shirts</option>
+    <option value="Pants">Pants</option>
+    <option value="Shoes">Shoes</option>
+    <option value="Bags">Bags</option>
+    <option value="Hats">Hats</option>
+    <option value="Accessories">Accessories</option>
+  </select>
 
-    <input id="price" type="number" placeholder="Price (THB)" required>
-    <input id="stock" type="number" placeholder="Stock" required>
+  <input id="price" type="number" placeholder="Price">
+  <input id="stock" type="number" placeholder="Stock">
+  <input id="image" type="file" accept="image/*">
 
-    <!-- ✅ เลือกไฟล์รูป -->
-    <input id="image" type="file" accept="image/*" required>
+  <button onclick="addProduct()">Add Product</button>
 
-    <button type="submit" class="add-btn">Add Product</button>
-  </form>
+  <hr>
+
+  <h2>Products</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="admin-product-list"></tbody>
+  </table>
+
 </section>
 
-<script>
-const API = "https://luxury-shop-backend.onrender.com";
-
-document.getElementById("addForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-  formData.append("name", document.getElementById("name").value.trim());
-  formData.append("category", document.getElementById("category").value);
-  formData.append("price", document.getElementById("price").value);
-  formData.append("stock", document.getElementById("stock").value);
-  formData.append("image", document.getElementById("image").files[0]);
-
-  const res = await fetch(`${API}/products`, {
-    method: "POST",
-    body: formData
-  });
-
-  if (!res.ok) {
-    alert("Add failed");
-    return;
-  }
-
-  alert("Product added");
-  location.href = "admin-edit.html";
-});
-</script>
-
+<script src="app.js" defer></script>
 </body>
 </html>
