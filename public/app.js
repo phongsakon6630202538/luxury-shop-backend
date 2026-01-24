@@ -75,29 +75,16 @@ async function addProduct() {
 
 /* ================= LOAD ADMIN PRODUCTS ================= */
 async function loadAdminProducts() {
-  const list = document.getElementById("admin-product-list");
-  if (!list) return; // ⭐ แก้ตรงนี้
+  const tbody = document.getElementById("admin-product-list");
+  if (!tbody) return; // ⭐⭐ ถ้าไม่มี = ออกทันที
 
-  const res = await fetch(PRODUCT_API);
-  const products = await res.json();
+  const res = await fetch(`${API}/products`);
+  adminProducts = await res.json();
 
-  list.innerHTML = "";
-
-  products.forEach(p => {
-    list.innerHTML += `
-      <tr>
-        <td>${p.name}</td>
-        <td>${p.category}</td>
-        <td>${p.price}</td>
-        <td>${p.stock}</td>
-        <td>
-          <button onclick="goEdit('${p._id}')">Edit</button>
-          <button onclick="deleteProduct('${p._id}')">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
+  tbody.innerHTML = "";
+  renderAdminProducts(); // ⚠️ ฟังก์ชันนี้ก็ต้อง safe ด้วย
 }
+
 
 
 /* ================= GO EDIT PAGE ================= */
@@ -436,16 +423,16 @@ const modalCaption = document.getElementById("modalCaption");
 
 /* ================= ADMIN ================= */
 async function loadAdminProducts() {
+  const tbody = document.getElementById("admin-product-list");
+  if (!tbody) return; // ⭐ สำคัญมาก กัน null ทุกหน้า
+
   const res = await fetch(`${API}/products`);
   adminProducts = await res.json();
 
-
-  const tbody = document.getElementById("admin-product-list");
-
   tbody.innerHTML = "";
-
   renderAdminProducts();
 }
+
 function deleteProduct(id) {
   openConfirm("Delete this product?", async () => {
 
