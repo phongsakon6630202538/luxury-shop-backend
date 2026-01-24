@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
+const path = require("path");
 
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -15,6 +16,9 @@ const app = express();
 /* ================= MIDDLEWARE ================= */
 app.use(cors());
 app.use(express.json());
+
+/* ================= STATIC FRONTEND ================= */
+app.use(express.static(path.join(__dirname, "public")));
 
 /* ================= CLOUDINARY CONFIG ================= */
 cloudinary.config({
@@ -42,11 +46,10 @@ mongoose
 
 /* ================= ROOT ================= */
 app.get("/", (req, res) => {
-  res.send("Luxury Shop Backend is running 🚀");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 /* ================= API ================= */
-
 /* GET all products */
 app.get("/products", async (req, res) => {
   try {
@@ -62,7 +65,7 @@ app.get("/products", async (req, res) => {
   }
 });
 
-/* ADD product (Cloudinary) */
+/* ADD product */
 app.post("/products", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -74,12 +77,11 @@ app.post("/products", upload.single("image"), async (req, res) => {
       category: req.body.category,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
-      image: req.file.path // Cloudinary URL
+      image: req.file.path
     });
 
     res.status(201).json(product);
   } catch (err) {
-    console.error("ADD ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -94,9 +96,7 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
       stock: Number(req.body.stock)
     };
 
-    if (req.file) {
-      updateData.image = req.file.path;
-    }
+    if (req.file) updateData.image = req.file.path;
 
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
@@ -106,7 +106,6 @@ app.put("/products/:id", upload.single("image"), async (req, res) => {
 
     res.json(updated);
   } catch (err) {
-    console.error("EDIT ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
